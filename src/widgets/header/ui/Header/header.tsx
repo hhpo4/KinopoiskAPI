@@ -1,7 +1,7 @@
 import { FC } from "react";
 
-import SearchInput from "./UI/search-input/search-input";
-import MyButton from "./UI/home-button/home-button";
+import SearchInput from "../search-input/search-input";
+import MyButton from "../home-button/home-button";
 
 import classes from "./header.module.css";
 

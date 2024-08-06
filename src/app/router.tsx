@@ -1,6 +1,7 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
 
-import Header from "../components/header/header";
+import { Header } from "@/widgets/header/ui";
+import { PopularMovies } from "@/pages/home";
 
 export const router = createBrowserRouter([
     {
@@ -14,7 +15,7 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <h1>popular movies</h1>,
+                element: <PopularMovies />,
             },
             {
                 path: "/search",

@@ -218,4 +218,18 @@ export interface MoviesSearchedDefault {
     page: number;
     pages: number;
 }
-    
+type SearchType =
+    | "movie"
+    | "tv-series"
+    | "cartoon"
+    | "anime"
+    | "animated-series";
+
+export interface MoviesSearchedDefaultParams {
+    type: SearchType;
+    isSeries: boolean;
+    year: number;
+    ratingKp: string;
+    page?: number;
+    limit?: number;
+}

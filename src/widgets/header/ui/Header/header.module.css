@@ -5,10 +5,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    right: 0;
 }
 
 .wrapper {
-    width: 1000px;
+    width: 80%;
     display: flex;
     justify-content: space-between;
     align-items: center;
