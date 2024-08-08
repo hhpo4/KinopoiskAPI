@@ -7,15 +7,14 @@ const SearchInput: FC<InputHTMLAttributes<HTMLInputElement>> = (props) => {
     const [searchQuery, setSearchQuery] = useState("");
 
     const { data } = useGetMoviesByNameQuery({
-        query: searchQuery,
+        query: "1+1",
     });
 
     console.log(data);
-
+    
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter") {
-            setSearchQuery(inputValue); // Устанавливаем значение для поиска
-            console.log(inputValue); // Выводим значение в консоль (можно убрать)
+            setSearchQuery(inputValue);
         }
     };
 

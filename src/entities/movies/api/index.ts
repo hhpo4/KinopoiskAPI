@@ -1,12 +1,22 @@
-import { baseApi } from "@/shared/api";
 import {
     MovieSearchedDefault,
     MoviesSearchedDefault,
     MoviesSearchedByName,
 } from "@/shared/types";
 import { MoviesSearchedDefaultParams } from "../model/types";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-export const moviesApi = baseApi.injectEndpoints({
+const TOKEN = import.meta.env.VITE_API_KEY;
+
+export const moviesApi = createApi({
+    baseQuery: fetchBaseQuery({
+        baseUrl: "https://api.kinopoisk.dev/v1.4/movie",
+        prepareHeaders: (headers) => {
+            headers.set("X-API-KEY", TOKEN);
+            headers.set("accept", "application/json");
+            return headers;
+        },
+    }),
     endpoints: (builder) => ({
         getPopularMovies: builder.query<
             MoviesSearchedDefault,
@@ -26,6 +36,7 @@ export const moviesApi = baseApi.injectEndpoints({
                     `page=${page}&limit=${limit}&type=${type}&isSeries=${isSeries}&year=${year}&rating.kp= ${ratingKp}`
                 )}`;
             },
+            transformResponse: (res: unknown) => res as MoviesSearchedDefault,
         }),
         getMoviesByName: builder.query<
             MoviesSearchedByName,
@@ -38,6 +49,7 @@ export const moviesApi = baseApi.injectEndpoints({
                     query
                 )}&page=${page}&limit=${limit}`;
             },
+
         }),
         getMovieById: builder.query<MovieSearchedDefault, string>({
             query: (movieId) => `/${movieId}`,
