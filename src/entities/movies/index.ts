@@ -1,4 +1,11 @@
-import moviesReducer from "./model/slice";
-import type { MovieState } from "./model/slice";
+import MovieCard from "./ui/movie-card/movie-card";
+import {
+    HomePageMovie,
+    HomePageMovies,
+    MovieCardData,
+    MoviesCardData,
+} from "./model/types";
 
-export { moviesReducer, MovieState };
+export default MovieCard;
+
+export type { HomePageMovies, HomePageMovie, MovieCardData, MoviesCardData };

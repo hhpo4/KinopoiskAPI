@@ -28,22 +28,22 @@ interface MovieSearchedByName {
         kpHD: string | null;
         tmdb: number | null;
     };
-    rating: {
+    rating: Partial<{
         kp: number | null;
         imdb: number | null;
         tmdb: number | null;
         filmCritics: number | null;
         russianFilmCritics: number | null;
         await: number | null;
-    };
-    votes: {
+    }>;
+    votes: Partial<{
         kp: number | null;
         imdb: number | null;
         tmdb: number | null;
         filmCritics: number | null;
         russianFilmCritics: number | null;
         await: number | null;
-    };
+    }>;
     backdrop: {
         url: string | null;
         previewUrl: string | null;
@@ -225,11 +225,96 @@ type SearchType =
     | "anime"
     | "animated-series";
 
-export interface MoviesSearchedDefaultParams {
-    type: SearchType;
-    isSeries: boolean;
-    year: number;
-    ratingKp: string;
+type SearchParams<T> = T[] | T;
+
+export type MoviesSearchedDefaultParams = Partial<{
+    type: SearchParams<SearchType>;
+    isSeries: SearchParams<boolean>;
+    year: SearchParams<string>;
+    "genres.name": SearchParams<string>;
+    "rating.kp": SearchParams<string>;
     page?: number;
     limit?: number;
+}>;
+
+/* ================================ */
+
+export interface HomePageMovie {
+    id: number | null;
+    name: string;
+    alternativeName: string | null;
+    enName: string | null;
+    type: string | null;
+    typeNumber: number | null;
+    year: number | null;
+    description: string | null;
+    shortDescription: string | null;
+    status: string | null;
+    rating: {
+        kp: number;
+        imdb: number | null;
+        filmCritics: number | null;
+        russianFilmCritics: number | null;
+        await: number | null;
+    };
+    votes: {
+        kp: number | null;
+        imdb: number | null;
+        filmCritics: number | null;
+        russianFilmCritics: number | null;
+        await: number | null;
+    } | null;
+    movieLength: number | null;
+    totalSeriesLength: number | null;
+    seriesLength: number | null;
+    ratingMpaa: string | null;
+    ageRating: string | null;
+    poster: {
+        url: string;
+        previewUrl: string | null;
+    };
+    genres: {
+        name: string | null;
+    }[] | null;
+    countries: {
+        name: string | null;
+    }[] | null;
+    top10: number | null;
+    top250: number | null;
+    isSeries: boolean | null;
+    ticketsOnSale: boolean | null;
 }
+
+export interface HomePageMovies {
+    docs: HomePageMovie[];
+    total: number;
+    limit: number;
+    page: number;
+    pages: number;
+} ;
+
+/* ================================ */
+
+export interface MoviesChainParams {
+    chainName: string;
+    moviesParams: MoviesSearchedDefaultParams;
+}
+
+export interface PopularMovieData {
+    moviesChainParams: MoviesChainParams;
+    movies: HomePageMovie[];
+}
+
+export type PopularMoviesData = PopularMovieData[];
+
+/* ================================ */
+
+export interface MovieCardData {
+    id: string;
+    rating: number;
+    posterUrl: string;
+}
+
+export type MoviesCardData  = MovieCardData[];
+
+/* ================================ */

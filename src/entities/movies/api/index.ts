@@ -1,64 +1,68 @@
-import {
-    MovieSearchedDefault,
-    MoviesSearchedDefault,
-    MoviesSearchedByName,
-} from "@/shared/types";
+import axios, { AxiosError } from "axios";
+
 import { MoviesSearchedDefaultParams } from "../model/types";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { HomePageMovies } from "../model/types";
 
 const TOKEN = import.meta.env.VITE_API_KEY;
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-export const moviesApi = createApi({
-    baseQuery: fetchBaseQuery({
-        baseUrl: "https://api.kinopoisk.dev/v1.4/movie",
-        prepareHeaders: (headers) => {
-            headers.set("X-API-KEY", TOKEN);
-            headers.set("accept", "application/json");
-            return headers;
-        },
-    }),
-    endpoints: (builder) => ({
-        getPopularMovies: builder.query<
-            MoviesSearchedDefault,
-            MoviesSearchedDefaultParams
-        >({
-            query: (params) => {
-                const {
-                    page = 1,
-                    limit = 10,
-                    type,
-                    isSeries,
-                    year,
-                    ratingKp,
-                } = params;
-
-                return `?${encodeURIComponent(
-                    `page=${page}&limit=${limit}&type=${type}&isSeries=${isSeries}&year=${year}&rating.kp= ${ratingKp}`
-                )}`;
-            },
-            transformResponse: (res: unknown) => res as MoviesSearchedDefault,
-        }),
-        getMoviesByName: builder.query<
-            MoviesSearchedByName,
-            { query: string; page?: number; limit?: number }
-        >({
-            query: (params) => {
-                const { query, page = 1, limit = 10 } = params;
-
-                return `/search?query=${encodeURIComponent(
-                    query
-                )}&page=${page}&limit=${limit}`;
-            },
-
-        }),
-        getMovieById: builder.query<MovieSearchedDefault, string>({
-            query: (movieId) => `/${movieId}`,
-        }),
-    }),
+const instance = axios.create({
+    baseURL: BASE_URL,
+    headers: {
+        "X-API-KEY": TOKEN,
+        accept: "application/json",
+    },
+    params: {
+        page: 1,
+        limit: 10,
+    },
 });
 
-export const {
-    useGetMoviesByNameQuery,
-    useGetMovieByIdQuery,
-    useGetPopularMoviesQuery,
-} = moviesApi;
+export const getHomePageMovies = async (
+    params: MoviesSearchedDefaultParams
+): Promise<HomePageMovies> => {
+    try {
+        const response = await instance.get("", {
+            headers: {
+                "X-API-KEY": TOKEN,
+                accept: "application/json",
+            },
+            params: {
+                ...instance.defaults.params,
+                ...params,
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            console.error("Ошибка API:", error.message, error.response?.data);
+            throw new Error(`Ошибка API: ${error.message}`);
+        } else {
+            console.error("Неизвестная ошибка:", error);
+            throw new Error(`Неизвестная ошибка: ${error}`);
+        }
+    }
+};
+
+export const getMoviesByName = async ({ query = "", page = 1, limit = 10 }) => {
+    try {
+        const response = await instance.get("/search", {
+            params: {
+                query,
+                page,
+                limit,
+            },
+        });
+    
+        return response.data
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            console.error("Ошибка API:", error.message, error.response?.data);
+            throw new Error(`Ошибка API: ${error.message}`);
+        } else {
+            console.error("Неизвестная ошибка:", error);
+            throw new Error(`Неизвестная ошибка: ${error}`);
+        }
+    }
+};

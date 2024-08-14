@@ -1,13 +1,17 @@
 import { FC, useState } from "react";
 import classNames from "classnames";
 
+import { MovieCardData } from "../../model/types";
+
 import classes from "./movie-card.module.css";
 
 interface MovieCardProps {
-    rating: number;
+    movieCardData: MovieCardData;
 }
 
-const MovieCard: FC<MovieCardProps> = ({ rating }) => {
+const MovieCard: FC<MovieCardProps> = ({
+    movieCardData: { id, rating, posterUrl },
+}) => {
     const [imageLoaded, setImageLoaded] = useState(false);
     const [imageError, setImageError] = useState(false);
 
@@ -30,20 +34,19 @@ const MovieCard: FC<MovieCardProps> = ({ rating }) => {
     };
 
     return (
-            <div className={classes.card}>
-                <div className={classes.imgWrapper}>
-                    <img
-                        src="https://image.openmoviedb.com/kinopoisk-images/1946459/bf93b465-1189-4155-9dd1-cb9fb5cb1bb5/x1000"
-                        alt="Описание изображения"
-                        onLoad={handleImageLoad}
-                        onError={handleImageError}
-                    />
-                </div>
-                {imageLoaded && !imageError && (
-                    <div className={styles}>{rating.toFixed(1)}</div>
-                )}
-                <h1 className={classes.name}>Movie name</h1>
+        <div className={classes.card}>
+            <div className={classes.imgWrapper}>
+                <img
+                    src={posterUrl}
+                    alt="Описание изображения"
+                    onLoad={handleImageLoad}
+                    onError={handleImageError}
+                />
             </div>
+            {imageLoaded && !imageError && (
+                <div className={styles}>{rating.toFixed(1)}</div>
+            )}
+        </div>
     );
 };
 

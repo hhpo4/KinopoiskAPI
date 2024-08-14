@@ -1,17 +1,43 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 
-import PopularMoviesChain from "./popular-movies-chain";
+import {
+    MoviesContext,
+    PopularMovieData,
+    HomePageMovie,
+    MoviesCardData,
+} from "../../";
+import PopularMoviesList from "./popular-movies-list";
 
-import classes from "./popular-movies.module.css";
+import classes from "../styles.module.css";
 
-interface PopularMoviesProps {}
+const PopularMovies: FC = () => {
+    const { homePageMovies } = useContext(MoviesContext);
 
-const PopularMovies: FC<PopularMoviesProps> = () => {
+    if (!homePageMovies || homePageMovies.length === 0) {
+        return <div>No movies available</div>;
+    }
+
     return (
         <div className={classes.wrapper}>
-            <PopularMoviesChain chainName="Боевики" />
-            <PopularMoviesChain chainName="Триллеры" />
-            <PopularMoviesChain chainName="Триллеры" />
+            {homePageMovies.map((movie: PopularMovieData) => {
+                const currentListMoviesCardsData: MoviesCardData =
+                    movie.movies.map((movieCardData: HomePageMovie) => ({
+                        id: movieCardData.name,
+                        rating: movieCardData.rating.kp,
+                        posterUrl:
+                            movieCardData.poster.previewUrl !== null
+                                ? movieCardData.poster.previewUrl
+                                : movieCardData.poster.url,
+                    }));
+
+                return (
+                    <PopularMoviesList
+                        key={movie.moviesChainParams.chainName}
+                        chainName={movie.moviesChainParams.chainName}
+                        moviesCardData={currentListMoviesCardsData}
+                    />
+                );
+            })}
         </div>
     );
 };
