@@ -4,8 +4,19 @@ import {
     HomePageMovies,
     MovieCardData,
     MoviesCardData,
+    MoviesSearchedByNameParams,
 } from "./model/types";
 
-export default MovieCard;
+import { getMoviesByName } from "./api";
 
-export type { HomePageMovies, HomePageMovie, MovieCardData, MoviesCardData };
+/* ================================ */
+
+export default MovieCard;
+export { getMoviesByName };
+export type {
+    MoviesSearchedByNameParams,
+    HomePageMovies,
+    HomePageMovie,
+    MovieCardData,
+    MoviesCardData,
+};

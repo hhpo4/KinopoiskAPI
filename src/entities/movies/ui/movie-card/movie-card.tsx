@@ -1,7 +1,10 @@
-import { FC, useState } from "react";
-import classNames from "classnames";
+import { FC, useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
+import { getMovieById } from "../../api";
 import { MovieCardData } from "../../model/types";
+import { MoviesContext } from "@/shared/context";
+import Rating from "./rating";
 
 import classes from "./movie-card.module.css";
 
@@ -10,18 +13,13 @@ interface MovieCardProps {
 }
 
 const MovieCard: FC<MovieCardProps> = ({
-    movieCardData: { id, rating, posterUrl },
+    movieCardData: { id, rating, posterUrl, name },
 }) => {
+    const { setMovieDetails } = useContext(MoviesContext);
+    const navigate = useNavigate();
+
     const [imageLoaded, setImageLoaded] = useState(false);
     const [imageError, setImageError] = useState(false);
-
-    const styles = classNames({
-        [classes.rating]: true,
-        [classes.lessThan10]: rating <= 10 && rating >= 8,
-        [classes.lessThan8]: rating < 8 && rating >= 7,
-        [classes.lessThan7]: rating < 7 && rating > 5,
-        [classes.lessThan5]: rating < 5,
-    });
 
     const handleImageLoad = () => {
         setImageLoaded(true);
@@ -33,19 +31,21 @@ const MovieCard: FC<MovieCardProps> = ({
         setImageLoaded(false);
     };
 
+    const handleMovieCardClick = async () => {
+        const movieDetailsData = await getMovieById(id);
+        setMovieDetails(movieDetailsData);
+        navigate(`/${movieDetailsData.id}`);
+    };
+
     return (
-        <div className={classes.card}>
-            <div className={classes.imgWrapper}>
-                <img
-                    src={posterUrl}
-                    alt="Описание изображения"
-                    onLoad={handleImageLoad}
-                    onError={handleImageError}
-                />
-            </div>
-            {imageLoaded && !imageError && (
-                <div className={styles}>{rating.toFixed(1)}</div>
-            )}
+        <div className={classes.card} onClick={handleMovieCardClick}>
+            <img
+                src={posterUrl}
+                alt={`Постер фильма ${name}`}
+                onLoad={handleImageLoad}
+                onError={handleImageError}
+            />
+            {imageLoaded && !imageError && <Rating rating={rating} />}
         </div>
     );
 };

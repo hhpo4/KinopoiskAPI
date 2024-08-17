@@ -1,4 +1,4 @@
-// import HomePage from "./ui/page";
+import HomePage from "./ui/page";
 import { MoviesContext } from "@/shared/context";
 import {
     MoviesChainParams,
@@ -26,4 +26,4 @@ export {
 
 /* ================================ */
 
-// export default HomePage;
+export default HomePage;

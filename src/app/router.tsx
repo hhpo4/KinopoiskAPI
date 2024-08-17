@@ -1,7 +1,10 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
 
 import Header from "@/widgets/header";
-import HomePage from "@/pages/home/ui/page";
+import HomePage from "@/pages/home";
+import MovieDetails from "@/pages/movie-details";
+
+
 export const router = createBrowserRouter([
     {
         path: "/",
@@ -22,7 +25,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/:movieId",
-                element: <h1>movie details</h1>,
+                element: <MovieDetails/>,
             },
             {
                 path: "*",

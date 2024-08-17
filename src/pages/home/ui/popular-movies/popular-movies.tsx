@@ -22,7 +22,8 @@ const PopularMovies: FC = () => {
             {homePageMovies.map((movie: PopularMovieData) => {
                 const currentListMoviesCardsData: MoviesCardData =
                     movie.movies.map((movieCardData: HomePageMovie) => ({
-                        id: movieCardData.name,
+                        id: movieCardData.id,
+                        name: movieCardData.name,
                         rating: movieCardData.rating.kp,
                         posterUrl:
                             movieCardData.poster.previewUrl !== null

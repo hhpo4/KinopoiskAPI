@@ -49,7 +49,7 @@ interface MovieSearchedByName {
         previewUrl: string | null;
     };
     movieLength: number | null;
-    id: number | null;
+    id: number;
     type:
         | "movie"
         | "tv-series"
@@ -218,6 +218,9 @@ export interface MoviesSearchedDefault {
     page: number;
     pages: number;
 }
+
+/* ================================ */
+
 type SearchType =
     | "movie"
     | "tv-series"
@@ -239,8 +242,16 @@ export type MoviesSearchedDefaultParams = Partial<{
 
 /* ================================ */
 
+export type MoviesSearchedByNameParams = {
+    page?: number;
+    limit?: number;
+    query: string;
+};
+
+/* ================================ */
+
 export interface HomePageMovie {
-    id: number | null;
+    id: number;
     name: string;
     alternativeName: string | null;
     enName: string | null;
@@ -273,12 +284,16 @@ export interface HomePageMovie {
         url: string;
         previewUrl: string | null;
     };
-    genres: {
-        name: string | null;
-    }[] | null;
-    countries: {
-        name: string | null;
-    }[] | null;
+    genres:
+        | {
+              name: string | null;
+          }[]
+        | null;
+    countries:
+        | {
+              name: string | null;
+          }[]
+        | null;
     top10: number | null;
     top250: number | null;
     isSeries: boolean | null;
@@ -291,7 +306,7 @@ export interface HomePageMovies {
     limit: number;
     page: number;
     pages: number;
-} ;
+}
 
 /* ================================ */
 
@@ -310,11 +325,12 @@ export type PopularMoviesData = PopularMovieData[];
 /* ================================ */
 
 export interface MovieCardData {
-    id: string;
+    id: number;
+    name: string;
     rating: number;
     posterUrl: string;
 }
 
-export type MoviesCardData  = MovieCardData[];
+export type MoviesCardData = MovieCardData[];
 
 /* ================================ */

@@ -11,7 +11,7 @@ interface PopularMoviesChainProps {
 
 const PopularMoviesList: FC<PopularMoviesChainProps> = ({ chainName, moviesCardData }) => {
     return (
-        <>
+        <div className="chain">
             <h1 className="chainName"> {chainName}</h1>
             <div className={classes.moviesChain}>
                 {
@@ -23,7 +23,7 @@ const PopularMoviesList: FC<PopularMoviesChainProps> = ({ chainName, moviesCardD
                     ))
                 }
             </div>
-        </>
+        </div>
     );
 };
 

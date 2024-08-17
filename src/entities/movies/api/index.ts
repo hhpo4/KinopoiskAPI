@@ -1,7 +1,11 @@
 import axios, { AxiosError } from "axios";
 
-import { MoviesSearchedDefaultParams } from "../model/types";
-import { HomePageMovies } from "../model/types";
+import {
+    MoviesSearchedDefaultParams,
+    MovieSearchedDefault,
+    HomePageMovies,
+    MoviesSearchedByNameParams,
+} from "../model/types";
 
 const TOKEN = import.meta.env.VITE_API_KEY;
 const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -18,15 +22,28 @@ const instance = axios.create({
     },
 });
 
+export const getMovieById = async (
+    movieId: number
+): Promise<MovieSearchedDefault> => {
+    try {
+        const response = await instance.get(`/${movieId}`);
+
+        return response.data;
+    } catch (error) {
+        const errorMessage = error instanceof AxiosError 
+            ? `Ошибка API: ${error.message} - ${error.response?.data}`
+            : `Неизвестная ошибка: ${error}`;
+        
+        console.error(errorMessage);
+        throw new Error(errorMessage);
+    }
+};
+
 export const getHomePageMovies = async (
     params: MoviesSearchedDefaultParams
 ): Promise<HomePageMovies> => {
     try {
         const response = await instance.get("", {
-            headers: {
-                "X-API-KEY": TOKEN,
-                accept: "application/json",
-            },
             params: {
                 ...instance.defaults.params,
                 ...params,
@@ -45,17 +62,16 @@ export const getHomePageMovies = async (
     }
 };
 
-export const getMoviesByName = async ({ query = "", page = 1, limit = 10 }) => {
+export const getMoviesByName = async ( params: MoviesSearchedByNameParams ) => {
     try {
         const response = await instance.get("/search", {
             params: {
-                query,
-                page,
-                limit,
+                ...instance.defaults.params,
+                ...params,            
             },
         });
-    
-        return response.data
+
+        return response.data;
     } catch (error) {
         if (error instanceof AxiosError) {
             console.error("Ошибка API:", error.message, error.response?.data);
